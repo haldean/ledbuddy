@@ -2,8 +2,10 @@
 
 #define LED_PIN 11
 #define SERVO_PIN 3
+
 #define WAKE_STATE 0
 #define SLEEP_STATE 1
+
 #define SERVO_ROTATE_MAX 90
 
 Servo rot;
@@ -15,22 +17,28 @@ void wait(unsigned long waitMillis) {
 }
 
 void setup() {
+  wait(1000);
   pinMode(LED_PIN, OUTPUT);
   rot.attach(SERVO_PIN);
-  for (int i = 0; i <= SERVO_ROTATE_MAX; i++) rot.write(i);
+  for (int i = 0; i <= SERVO_ROTATE_MAX; i++) {
+    rot.write(i);
+    wait(40);
+  }
 }
 
 void loop() {
   if (state == WAKE_STATE) {
     wakeCycle();
+    if (random(0, 200) == 0) {
+      state = !state;
+    }
   } else if (state == SLEEP_STATE) {
     sleepCycle();
+    if (random(0, 10) == 0) {
+      state = !state;
+    }
   } else {
     state = SLEEP_STATE;
-  }
-  
-  if (random(0, 200) == 0) {
-    state = !state;
   }
 }
 
